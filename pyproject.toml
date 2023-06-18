@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "flask-template"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "flask_template"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3.2"
+flask-wtf = "^1.1.1"
+postgresqlite = "^0.4.2"
+pgcli = "^3.5.0"
+email-validator = "^2.0.0.post2"
+flask-sqlalchemy = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

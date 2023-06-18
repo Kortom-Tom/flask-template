@@ -1,0 +1,56 @@
+{% macro form_macro(form, action, method="post") %}
+<link rel="stylesheet" href="/static/generic-form.css">
+
+<form method="{{ method }}" action="{{ action }}" enctype="multipart/form-data">
+    {% for field in form -%}
+    {% if field.type != 'CSRFTokenField' and field.type != 'SubmitField' %}
+    <label class="{{field.render_kw.class}}">
+        {%- if field.type != 'SubmitField' and field.type != 'BooleanField' -%}
+        <span>{{field.label.text}}</span>
+        {%- endif -%}
+
+        {% if field.type == 'RadioField' %}
+        <div class="radio-options">
+            {% for subfield in field %}
+            <label>
+                {{ subfield }} <span>{{subfield.label.text}}</span>
+            </label>
+            {% endfor %}
+        </div>
+        {% else %}
+        {{ field(class_=('has-error' if field.errors else '')) }}
+        {% endif %}
+
+        {%- if field.type == 'BooleanField' -%}
+        {{" "}}{{field.label.text}}
+        {%- endif -%}
+    </label>
+
+    {%- for err in field.errors -%}
+    <p class="notification is-important">{{ err|e }}</p>
+    {%- endfor -%}
+    {% if field.description %}
+    <div class="notification">{{field.description}}</div>
+    {% endif %}
+    {% endif %}
+    {% endfor -%}
+
+    {% for field in form -%}
+        {% if field.type == 'CSRFTokenField' and method != 'get' %}
+            {{ field() }}
+        {% endif %}
+    {% endfor %}
+
+    <div class="buttons">
+        {% for field in form -%}
+            {% if field.type == 'SubmitField' %}
+                {% if field.render_kw and "class_" in field.render_kw %}
+                {{ field() }}
+                {% else %}
+                {{ field(class_="button is-primary") }}
+                {% endif %}
+            {% endif %}
+        {% endfor -%}
+    </div>
+</form>
+{% endmacro %}
